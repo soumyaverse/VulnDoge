@@ -1,0 +1,6 @@
+*.log
+rough
+.env
+/rough.go
+*.log*
+/.idea

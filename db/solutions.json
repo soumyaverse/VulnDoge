@@ -1,0 +1,14 @@
+{
+    "solutions": [{
+            "lid": "a1",
+            "title": "demo1",
+            "sol": "access passwd file using <b>/var/www/images/../../../etc/passwd</b> path"
+        },
+        {
+            "lid": "a2",
+            "title": "demo2",
+            "sol": "demo1 solution"
+
+        }
+    ]
+}

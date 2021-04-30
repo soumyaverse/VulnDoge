@@ -1,0 +1,67 @@
+{{define "base"}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{template "title" .}}</title>
+    <style>
+        body {
+            font-family: Fira Code;
+            background-color: #bdc8b3;
+        }
+        
+        .nav {
+            background-color: coral;
+        }
+    </style>
+   
+</head>
+
+<body>
+    <div class="nav">
+        <a href="/">VulnSec</a>
+        <span> » burpOverflow</span>
+    </div>
+    <hr color="black"> {{template "main" .}}
+
+    {{if .Sol}}
+    <br>
+    <span id="sol-btn">
+        <div style='text-align: center;background-color:rgb(63, 209, 63);padding:2px;'><button onclick="getSolution()">Solution</button></div>
+    </span>
+    <br>
+    <input type="hidden" name="lid" id="lid" value={{.Lid}}>
+   <div id="sol-area"></div>   
+    <script>
+        const getSolution = () => {
+          
+            const req=new XMLHttpRequest();
+            WEB_URL=location.protocol+"//"+location.host+"/api/solution?"+"lid="+document.getElementById('lid').value
+            console.log(WEB_URL)
+            req.open('GET',WEB_URL);
+            req.responseType="text";
+            req.send();
+
+            req.onload=()=>{
+                document.getElementById("sol-btn").innerHTML = " <div style='text-align: center;background-color:yellow;padding:2px;'>&lt;=Solution=&gt;</div>";
+                console.log(document.getElementById("lid").value)
+                const data=req.response;
+                console.log(data)
+                document.getElementById("sol-area").innerHTML = data;
+            }
+            req.onerror=(err)=>{
+                console.log(err)
+            }
+
+    }
+    </script>
+    {{end}}
+
+</body>
+
+
+</html>
+{{end}}

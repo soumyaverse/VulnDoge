@@ -1,0 +1,11 @@
+{{template "base" .}} 
+{{define "title"}}xss easy{{end}} 
+{{define "main"}}
+<h2>XSS</h2>
+{{.Payload}}
+<br>
+<form action="/xss/easy/" method="get">
+    <input type="text" name="payload"><br><br>
+    <button type="submit">Submit</button>
+</form>
+{{end}}

@@ -1,4 +1,4 @@
-![logo](https://github.com/burpOverflow/VulnDoge/blob/master/media/logo2.jpeg)
+![logo](https://github.com/burpOverflow/VulnDoge/blob/master/media/logo2.png)
 
 
 ## INSTALLATION :

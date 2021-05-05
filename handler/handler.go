@@ -23,4 +23,5 @@ func HandleAPI() {
 
 func LoadImage() {
 	http.HandleFunc("/loadimage", loadimage.LoadImageHandler)
+	http.HandleFunc("/img", loadimage.Defult2)
 }

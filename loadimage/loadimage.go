@@ -21,7 +21,7 @@ func LoadImageHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		defult(imagename, w)
+		Defult(imagename, w)
 	}
 	if r.Referer() == addr[0]+"easy2/" || r.Referer() == addr[1]+"easy2/" {
 
@@ -31,7 +31,7 @@ func LoadImageHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		defult(imagename, w)
+		Defult(imagename, w)
 	}
 	if r.Referer() == addr[0]+"medium1/" || r.Referer() == addr[1]+"medium1/" {
 
@@ -41,12 +41,12 @@ func LoadImageHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		defult(imagename, w)
+		Defult(imagename, w)
 	}
 	if r.Referer() == addr[0]+"medium2/" || r.Referer() == addr[1]+"medium2/" {
 		fmt.Println("medium2 img load..")
 		if imagename == "go.png" {
-			defult(imagename, w)
+			Defult(imagename, w)
 		} else {
 			fmt.Println("img name match")
 			file, _ := ioutil.ReadFile("media/passwd.txt")
@@ -66,13 +66,13 @@ func LoadImageHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			defult(imagename[16:], w)
+			Defult(imagename[16:], w)
 		}
 		fmt.Fprint(w, "Invalid Path")
 		return
 
 	}
-	defult(imagename, w)
+	Defult(imagename, w)
 
 }
 
@@ -84,7 +84,17 @@ func checkImgReadErr(err error, w http.ResponseWriter) {
 	}
 }
 
-func defult(imagename string, w http.ResponseWriter) {
+func Defult(imagename string, w http.ResponseWriter) {
+	img, err := ioutil.ReadFile("media/" + imagename)
+	checkImgReadErr(err, w)
+
+	fmt.Fprint(w, string(img))
+	return
+
+}
+
+func Defult2(w http.ResponseWriter, r *http.Request) {
+	imagename := r.FormValue("filename")
 	img, err := ioutil.ReadFile("media/" + imagename)
 	checkImgReadErr(err, w)
 

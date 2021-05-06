@@ -72,6 +72,21 @@ func LoadImageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 
 	}
+
+	if r.Referer() == addr[0]+"medium4/" || r.Referer() == addr[1]+"medium4/" {
+		fmt.Println("medium4 img load..")
+		if imagename == "go.png" {
+			Defult(imagename, w)
+		} else {
+			fmt.Println(imagename)
+			// fmt.Println("img name match")
+			// file, _ := ioutil.ReadFile("media/passwd.txt")
+			// fmt.Fprintf(w, string(file))
+			return
+		}
+
+		return
+	}
 	Defult(imagename, w)
 
 }

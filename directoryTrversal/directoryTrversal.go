@@ -69,3 +69,16 @@ func Medium3(w http.ResponseWriter, r *http.Request) {
 	}{Path: "» Easy", Desc: "Try to access <b>/etc/passwd</b> file using directoryTrversal Where The application transmits the full file path via a request parameter and validate whether it starts from <b>/var/www/images</b>", Title: "File path traversal, validation of start of path", ImgSrc: "/loadimage?filename=/var/www/images/go.png", Sol: true, Lid: "a1"})
 
 }
+
+func Medium4(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles("templates/directoryTrversal/directoryTrversal_easy.html", "templates/base.html"))
+	tmpl.ExecuteTemplate(w, "directoryTrversal_easy.html", struct {
+		Path   string
+		Desc   string
+		Title  string
+		ImgSrc string
+		Sol    bool
+		Lid    string
+	}{Path: "» Easy", Desc: "Try to access <b>/etc/passwd</b> file using directoryTrversal Where The application validates the file extensation", Title: "File path traversal, validation of file extensation", ImgSrc: "/loadimage?filename=go.png", Sol: true, Lid: "a2"})
+
+}

@@ -1,36 +1,11 @@
 {{template "base" .}} {{define "title"}}CSRF{{end}} {{define "main"}}
 <h2>CSRF</h2>
-
-<hr color="black"> {{if .Login}}
-<div style="background-color: aqua;">
-    <span><a href="/csrf/logout/">Logout ({{.Email}})</a></span>
-</div>
-<h1>You are logged in</h1>
-{{else}}
 <ol>
-
-    <li><a href="/csrf/create/">Create Account</a></li>
-    <li><a href="/csrf/login/">Login</a></li>
-
+    <li>Easy</li>
+    <ul style="list-style-type:disc">
+        <li><a href="/csrf/easy1/">Very Simple</a></li>
+        
+    </ul>
+    
 </ol>
-<div style="text-align: center;background-color: aqua;padding: 3px">
-    {{if .State}}
-    <h3>Create Account</h3>
-    <form method="post" action="/csrf/create/">
-        <label>EmailAddr:</label>
-        <input type="email" name="email" required><br><br>
-        <label for="pass">Password: </label>
-        <input type="password" name="password" required><br><br>
-        <button type="submit">Create</button><br>
-    </form>
-    {{else}}
-    <h3>Login</h3>
-    <form method="post" action="/csrf/login/">
-        <label>EmailAddr:</label>
-        <input type="email" name="email" required><br><br>
-        <label for="pass">Password: </label>
-        <input type="password" name="password" required><br><br>
-        <button type="submit">Login</button><br>
-    </form>
-</div>
-{{end}} {{end}} {{end}}
+{{end}}

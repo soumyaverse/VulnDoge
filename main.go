@@ -29,6 +29,8 @@ func main() {
 	// for directoryTrversal
 	handler.HandleDirectoryTrversal()
 
+	handler.HandleCSRF()
+
 	handler.LoadImage()
 
 	handler.HandleAPI()

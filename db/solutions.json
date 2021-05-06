@@ -9,6 +9,12 @@
             "title": "demo2",
             "sol": "demo1 solution"
 
+        },
+        {
+            "lid": "a3",
+            "title": "xss easy",
+            "sol": "easy XSS"
+
         }
     ]
 }

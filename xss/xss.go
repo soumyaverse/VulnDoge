@@ -20,7 +20,9 @@ func Easy(w http.ResponseWriter, r *http.Request) {
 
 	tmpl.ExecuteTemplate(w, "xss_easy.html", struct {
 		Payload string
-	}{Payload: payload})
+		Sol     bool
+		Lid     string
+	}{Payload: payload, Sol: true, Lid: "a3"})
 
 }
 

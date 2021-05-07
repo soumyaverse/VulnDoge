@@ -23,6 +23,8 @@ func HandleCSRF() {
 	http.HandleFunc("/csrf/", csrf.CSRFHandler)
 	http.HandleFunc("/csrf/easy1/", csrf.Easy1)
 	http.HandleFunc("/csrf/easy1/login/", csrf.Login)
+	http.HandleFunc("/csrf/easy1/create/", csrf.Create)
+
 }
 
 func HandleAPI() {

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"database/sql"
+	"flag"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -10,9 +12,28 @@ import (
 	"github.com/burpOverflow/VulnDoge/oAuth"
 	"github.com/burpOverflow/VulnDoge/pkg/CheckErr"
 	"github.com/burpOverflow/VulnDoge/xss"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
+	dbConfig := flag.String("dbconfig", "nil", "mysql url")
+	flag.Parse()
+	if *dbConfig != "nil" {
+		fmt.Println("setting database....")
+		db, err := sql.Open("mysql", *dbConfig)
+		CheckErr.Check(err)
+		defer db.Close()
+		_, err = db.Exec(`DROP DATABASE IF EXISTS VulnDoge`)
+		CheckErr.Check(err)
+		_, err = db.Exec(`CREATE DATABASE VulnDoge`)
+		CheckErr.Check(err)
+		db, err = sql.Open("mysql", os.Getenv("MYSQL_URL"))
+		CheckErr.Check(err)
+		defer db.Close()
+		_, err = db.Exec(`CREATE TABLE users(id INT PRIMARY KEY AUTO_INCREMENT,username VARCHAR(255),email VARCHAR(255),password VARCHAR(255),session VARCHAR(255))`)
+		CheckErr.Check(err)
+
+	}
 	PORT := os.Getenv("VPORT")
 
 	http.HandleFunc("/", Index)

@@ -1,12 +1,23 @@
 package csrf
 
 import (
+	"database/sql"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"text/template"
 
 	"github.com/burpOverflow/VulnDoge/pkg/rand"
+	_ "github.com/go-sql-driver/mysql"
 )
+
+type Users struct {
+	Id       int
+	Username string
+	Email    string
+	Password string
+}
 
 func CSRFHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("templates/csrf/csrf.html", "templates/base.html"))
@@ -33,9 +44,39 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		username := r.PostFormValue("username")
 		password := r.PostFormValue("password")
-		fmt.Println(username)
-		fmt.Println(password)
-		fmt.Fprintf(w, "success login")
+
+		db, err := sql.Open("mysql", os.Getenv("MYSQL_URL"))
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer db.Close()
+		var dbpassword string
+		err2 := db.QueryRow(`SELECT password from users WHERE username = ? `, username).Scan(&dbpassword)
+		if err2 != nil {
+			log.Fatal(err2)
+		}
+		fmt.Println("password: ", password)
+		fmt.Println("dbpassword: ", dbpassword)
+		if password == dbpassword {
+			StoreCookie(w)
+			http.Redirect(w, r, "/csrf/easy1/", 302)
+		}
+		// sql := `SELECT * FROM users WHERE username = ? `
+		// res, err := db.Query(sql, username)
+		// if err != nil {
+		// 	log.Fatal(err)
+		// }
+		// defer res.Close()
+		// if res.Next() {
+		// 	var users Users
+		// 	err := res.Scan(&users.Id, &users.Username, &users.Email, &users.Password)
+		// 	if err != nil {
+		// 		log.Fatal(err)
+		// 	}
+		// 	fmt.Println(users)
+		// }
+
+		fmt.Fprintf(w, "not logged in!")
 	}
 }
 
@@ -44,6 +85,31 @@ func Create(w http.ResponseWriter, r *http.Request) {
 		username := r.PostFormValue("username")
 		email := r.PostFormValue("email")
 		password := r.PostFormValue("password")
+
+		db, err := sql.Open("mysql", os.Getenv("MYSQL_URL"))
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer db.Close()
+
+		check := UserExists(db, username)
+		if check == true {
+			fmt.Fprintf(w, username+" user exists")
+			return
+		}
+		check = EmailExists(db, email)
+		if check == true {
+			fmt.Fprintf(w, email+" email exists")
+			return
+		}
+
+		// sql := "INSERT INTO users(username,email,password) VALUES(" + "'" + username + "'" + "," + "'" + email + "'" + "," + "'" + password + "'" + ")"
+
+		sql := `INSERT INTO users(username,email,password) VALUES(?,?,?)`
+		_, err = db.Exec(sql, username, email, password)
+		if err != nil {
+			log.Fatal(err)
+		}
 		fmt.Println(username)
 		fmt.Println(email)
 		fmt.Println(password)
@@ -51,24 +117,62 @@ func Create(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func StoreCookie(w http.ResponseWriter, r *http.Request, i int) {
-	cookie, err := r.Cookie("session")
-	fmt.Println("cookie: ", cookie)
-	if err != nil {
-		fmt.Println("cookie was not found")
-		cookieValue := rand.String(16)
-		cookie = &http.Cookie{
-			Name:     "session",
-			Value:    cookieValue,
-			HttpOnly: false,
-			Path:     "/csrf/",
-		}
-		http.SetCookie(w, cookie)
+func StoreCookie(w http.ResponseWriter) {
+	// cookie, err := r.Cookie("session")
+	// fmt.Println("cookie: ", cookie)
+	// if err != nil {
+	// 	fmt.Println("cookie was not found")
+	// 	cookieValue := rand.String(16)
+	// 	cookie = &http.Cookie{
+	// 		Name:     "session",
+	// 		Value:    cookieValue,
+	// 		HttpOnly: false,
+	// 		Path:     "/csrf/",
+	// 	}
+	// 	http.SetCookie(w, cookie)
 
-		// users.Users[i].Cookie = cookieValue
-		// fmt.Println(users.Users[i].Cookie)
-		// fmt.Println(users)
-		// DbUpdate(users)
+	// users.Users[i].Cookie = cookieValue
+	// fmt.Println(users.Users[i].Cookie)
+	// fmt.Println(users)
+	// DbUpdate(users)
+	// }
+	cookieValue := rand.String(16)
+	cookie := &http.Cookie{
+		Name:     "session",
+		Value:    cookieValue,
+		HttpOnly: false,
+		Path:     "/csrf/easy1/",
+	}
+	http.SetCookie(w, cookie)
+
+}
+
+func UserExists(db *sql.DB, username string) bool {
+	sqlStmt := `SELECT username FROM users WHERE username = ?`
+	err := db.QueryRow(sqlStmt, username).Scan(&username)
+	if err != nil {
+		if err != sql.ErrNoRows {
+
+			log.Print(err)
+		}
+
+		return false
 	}
 
+	return true
+}
+
+func EmailExists(db *sql.DB, email string) bool {
+	sqlStmt := `SELECT email FROM users WHERE email = ?`
+	err := db.QueryRow(sqlStmt, email).Scan(&email)
+	if err != nil {
+		if err != sql.ErrNoRows {
+
+			log.Print(err)
+		}
+
+		return false
+	}
+
+	return true
 }

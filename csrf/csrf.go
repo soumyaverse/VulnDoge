@@ -13,12 +13,12 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type Users struct {
-	Id       int
-	Username string
-	Email    string
-	Password string
-}
+// type Users struct {
+// 	Id       int
+// 	Username string
+// 	Email    string
+// 	Password string
+// }
 
 func CSRFHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("templates/csrf/csrf.html", "templates/base.html"))
@@ -30,6 +30,7 @@ func Easy1(w http.ResponseWriter, r *http.Request) {
 	db, err := sql.Open("mysql", os.Getenv("MYSQL_URL"))
 	CheckErr.Check(err)
 	defer db.Close()
+
 	isSession, _ := SessionExist(r, db)
 	if isSession == true {
 		http.Redirect(w, r, "/csrf/easy1/myaccount/", 302)
@@ -112,9 +113,7 @@ func Create(w http.ResponseWriter, r *http.Request) {
 
 		sql := `INSERT INTO users(username,email,password) VALUES(?,?,?)`
 		_, err = db.Exec(sql, username, email, password)
-		if err != nil {
-			log.Fatal(err)
-		}
+		CheckErr.Check(err)
 		StoreCookie(w, db, username)
 
 		http.Redirect(w, r, "/csrf/easy1/", 302)
@@ -211,12 +210,28 @@ func MyAccount(w http.ResponseWriter, r *http.Request) {
 
 		tmpl := template.Must(template.ParseFiles("templates/csrf/easy1.html", "templates/base.html"))
 		tmpl.ExecuteTemplate(w, "easy1.html", struct {
-			Title string
-			Desc  string
-			Login bool
-			User  string
-		}{Title: "csrf easy", Desc: "<h3>Welcome  " + uname + ":)</h3>", Login: isSession, User: uname})
+			Title     string
+			Desc      string
+			Login     bool
+			User      string
+			LogoutUrl string
+		}{Title: "csrf easy", Desc: "<h3>Welcome  " + uname + ":)</h3>", Login: isSession, User: uname, LogoutUrl: "/csrf/easy1/logout/"})
 	} else {
 		http.Redirect(w, r, "/csrf/easy1/", 302)
 	}
+}
+
+func Logout(w http.ResponseWriter, r *http.Request) {
+	clearSession(w, "/csrf/easy1/")
+	http.Redirect(w, r, "/csrf/easy1/", 302)
+}
+
+func clearSession(w http.ResponseWriter, path string) {
+	cookie := &http.Cookie{
+		Name:   "session",
+		Value:  "",
+		Path:   path,
+		MaxAge: -1,
+	}
+	http.SetCookie(w, cookie)
 }

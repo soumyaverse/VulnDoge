@@ -41,7 +41,7 @@
     
     {{if .Login}}
         <script>
-            document.getElementById('usr').innerHTML="<span class='user'>[{{.User}}] <a href='/logout/'>Logout</a></span> "
+            document.getElementById('usr').innerHTML="<span class='user'>[{{.User}}] <a href='{{.LogoutUrl}}'>Logout</a></span> "
         </script>
         {{end}} {{if .Sol}}
         <br>

@@ -35,7 +35,25 @@ func Easy1(w http.ResponseWriter, r *http.Request) {
 		Desc  string
 		Login bool
 		User  string
-	}{Title: "csrf easy", Desc: "<h3>Create Account</h3><form action='/csrf/easy1/create/' method='POST'><label for='username'>Username: </label><input type='text' name='username'><br><label for='email'>Email: &nbsp;&nbsp;&nbsp;</label><input type='email' name='email'><br><label for='password'>Password: </label><input type='password' name='password'><br><br><button type='submit'>Create</button></form> or <a href='/csrf/easy1/login/'>Login</a>", Login: false})
+	}{Title: "csrf easy", Desc: `<div class="container"><h3>Create Account</h3>
+	<form action='/csrf/easy1/create/' method='POST'>
+	  <div class="mb-3">
+		<div class="mb-3">
+		<label for="username" class="form-label">Username</label>
+		<input type="username" class="form-control" name="username" required>
+	  </div>
+		<label for="email" class="form-label">Email address</label>
+		<input type="email" class="form-control" id="exampleInputEmail1" name="email" required>
+		
+	  </div>
+	  <div class="mb-3">
+		<label for="password" class="form-label">Password</label>
+		<input type="password" class="form-control" name="password" required>
+	  </div>
+	  
+	  <button type="submit" class="btn btn-primary">Submit</button>
+	</form>or <a href='/csrf/easy1/login/'>Login</a>
+	</div>`, Login: false})
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
@@ -58,7 +76,21 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			Desc  string
 			Login bool
 			User  string
-		}{Title: "csrf easy", Desc: "<h3>Login</h3><form action='/csrf/easy1/login/' method='POST'><label for='username'>Username: </label><input type='text' name='username'><br><label for='password'>Password: </label><input type='password' name='password'><br><br><button type='submit'>Login</button></form> or <a href='/csrf/easy1/'>Create Account</a>", Login: isSession, User: uname})
+		}{Title: "csrf easy", Desc: `<div class="container"><h3>Login</h3>
+		<form action='/csrf/easy1/login/' method='POST'>
+		<div class="mb-3">
+			<div class="mb-3">
+			<label for="username" class="form-label">Username</label>
+			<input type="username" class="form-control" name="username" required>
+		  </div>			
+		</div>
+		  <div class="mb-3">
+			<label for="password" class="form-label">Password</label>
+			<input type="password" class="form-control" name="password" required>
+		  </div>
+		  <button type="submit" class="btn btn-primary">Submit</button>
+		</form>or <a href='/csrf/easy1/'>Create Account</a>
+		</div>`, Login: isSession, User: uname})
 	}
 	if r.Method == http.MethodPost {
 		username := r.PostFormValue("username")

@@ -13,13 +13,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-// type Users struct {
-// 	Id       int
-// 	Username string
-// 	Email    string
-// 	Password string
-// }
-
 func CSRFHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("templates/csrf/csrf.html", "templates/base.html"))
 	tmpl.ExecuteTemplate(w, "csrf.html", nil)
@@ -46,6 +39,7 @@ func Easy1(w http.ResponseWriter, r *http.Request) {
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
+
 	db, err := sql.Open("mysql", os.Getenv("MYSQL_URL"))
 	CheckErr.Check(err)
 	defer db.Close()
@@ -73,8 +67,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		var dbpassword string
 		err2 := db.QueryRow(`SELECT password from users WHERE username = ? `, username).Scan(&dbpassword)
 		CheckErr.Check(err2)
-		fmt.Println("password: ", password)
-		fmt.Println("dbpassword: ", dbpassword)
+
 		if password == dbpassword {
 			StoreCookie(w, db, username)
 			http.Redirect(w, r, "/csrf/easy1/", 302)
@@ -186,6 +179,12 @@ func DBUpdateSession(username string, session string, db *sql.DB) {
 	CheckErr.Check(err)
 	defer db.Close()
 
+}
+
+func DBUpdatePassword(username string, newpass string, db *sql.DB) {
+	_, err := db.Exec(`UPDATE users SET password= ? WHERE username= ? `, newpass, username)
+	CheckErr.Check(err)
+	defer db.Close()
 }
 
 func SessionExist(r *http.Request, db *sql.DB) (bool, string) {

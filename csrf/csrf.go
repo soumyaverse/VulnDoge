@@ -35,7 +35,7 @@ func Easy1(w http.ResponseWriter, r *http.Request) {
 		Desc  string
 		Login bool
 		User  string
-	}{Title: "csrf easy", Desc: `<div class="container"><h3>Create Account</h3>
+	}{Title: "csrf easy", Desc: `<p style="color:green;">It contains a very simple csrf vuln in change password functionality. Try to hack :) </p><div class="container"><h3>Create Account</h3>
 	<form action='/csrf/easy1/create/' method='POST'>
 	  <div class="mb-3">
 		<div class="mb-3">
@@ -247,10 +247,10 @@ func MyAccount(w http.ResponseWriter, r *http.Request) {
 			User      string
 			LogoutUrl string
 		}{Title: "csrf easy", Desc: `<h3>Welcome ` + uname + ` :)</h3><br><br><div class="container"><h4>Change Password</h4>
-		<form action='/csrf/easy1/changepass/' method='POST'>
+		<form action='/csrf/easy1/changepassword/' method='POST'>
 		  <div class="mb-3">
 			<label for="newpassword" class="form-label">New Password</label>
-			<input type="password" class="form-control" name="password" required>
+			<input type="password" class="form-control" name="newpassword" required>
 		  </div>
 		  <button type="submit" class="btn btn-primary">Submit</button>
 		</form>

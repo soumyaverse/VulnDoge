@@ -26,6 +26,7 @@ func HandleCSRF() {
 	http.HandleFunc("/csrf/easy1/create/", csrf.Create)
 	http.HandleFunc("/csrf/easy1/myaccount/", csrf.MyAccount)
 	http.HandleFunc("/csrf/easy1/logout/", csrf.Logout)
+	http.HandleFunc("/csrf/easy1/changepassword/", csrf.ChangePassword)
 
 }
 

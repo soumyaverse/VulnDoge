@@ -246,7 +246,7 @@ func MyAccount(w http.ResponseWriter, r *http.Request) {
 			Login     bool
 			User      string
 			LogoutUrl string
-		}{Title: "csrf easy", Desc: "<h3>Welcome  " + uname + ":)</h3>", Login: isSession, User: uname, LogoutUrl: "/csrf/easy1/logout/"})
+		}{Title: "csrf easy", Desc: `<h3>Welcome ` + uname + ` :)</h3>`, Login: isSession, User: uname, LogoutUrl: "/csrf/easy1/logout/"})
 	} else {
 		http.Redirect(w, r, "/csrf/easy1/", 302)
 	}

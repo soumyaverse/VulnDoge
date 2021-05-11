@@ -14,16 +14,23 @@ func XSSHandler(w http.ResponseWriter, r *http.Request) {
 	}{Path: "» xss"})
 }
 func Easy(w http.ResponseWriter, r *http.Request) {
-
-	tmpl := template.Must(template.ParseFiles("templates/xss/xss_easy.html", "templates/base.html"))
 	payload := r.FormValue("payload")
 
-	tmpl.ExecuteTemplate(w, "xss_easy.html", struct {
+	tmpl := template.Must(template.ParseFiles("templates/csrf/easy1.html", "templates/base.html"))
+	tmpl.ExecuteTemplate(w, "easy1.html", struct {
+		Title   string
 		Payload string
-		Sol     bool
-		Lid     string
-	}{Payload: payload, Sol: true, Lid: "a3"})
-
+		Desc    string
+		Login   bool
+		User    string
+	}{Title: "xss easy", Desc: `<h2>XSS</h2>
+	` + payload + `
+	<br>
+	<form action="/xss/easy/" method="get">
+		<input type="text" name="payload"><br><br>
+		
+		<button type="submit" class="btn btn-dark btn-sm">Submit</button>
+	</form>`, Login: false, Payload: payload})
 }
 
 func Hard(w http.ResponseWriter, r *http.Request) {

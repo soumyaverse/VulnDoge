@@ -246,7 +246,15 @@ func MyAccount(w http.ResponseWriter, r *http.Request) {
 			Login     bool
 			User      string
 			LogoutUrl string
-		}{Title: "csrf easy", Desc: `<h3>Welcome ` + uname + ` :)</h3>`, Login: isSession, User: uname, LogoutUrl: "/csrf/easy1/logout/"})
+		}{Title: "csrf easy", Desc: `<h3>Welcome ` + uname + ` :)</h3><br><br><div class="container"><h4>Change Password</h4>
+		<form action='/csrf/easy1/changepass/' method='POST'>
+		  <div class="mb-3">
+			<label for="newpassword" class="form-label">New Password</label>
+			<input type="password" class="form-control" name="password" required>
+		  </div>
+		  <button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+		</div>`, Login: isSession, User: uname, LogoutUrl: "/csrf/easy1/logout/"})
 	} else {
 		http.Redirect(w, r, "/csrf/easy1/", 302)
 	}

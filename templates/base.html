@@ -14,54 +14,27 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark sticky-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">
-             νυℓи∂σgє <span id="usr"></span>
-            </a>
+            <a class="navbar-brand" href="/">νυℓи∂σgє </a>
+
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"> <span id="usr" class="text-danger"></span></li>
+            </ul>
+            <form class="d-flex">
+                <button class="btn btn-outline-success" type="submit">Solution</button>
+            </form>
+
         </div>
     </nav>
     <div class="container-fluid pt-2">
 
-        {{template "main" .}}
-        {{if .Login}}
+        {{template "main" .}} {{if .Login}}
         <script>
-            document.getElementById('usr').innerHTML = "<span class='user'>[{{.User}}] <a href='{{.LogoutUrl}}'>Logout</a></span> "
-        </script>
-        {{end}} 
-        {{if .Sol}}
-        <br>
-        <span id="sol-btn">
-            <h1>solution</h1>
-            <div style='text-align: center;background-color:rgb(63, 209, 63);padding:2px;'><button onclick="getSolution()">Solution</button></div>
-        </span>
-        <br>
-        <input type="hidden" name="lid" id="lid" value={{.Lid}}>
-        <div id="sol-area"></div>
-        <script>
-            const getSolution = () => {
-
-                const req = new XMLHttpRequest();
-                WEB_URL = location.protocol + "//" + location.host + "/api/solution?" + "lid=" + document.getElementById('lid').value
-                console.log(WEB_URL)
-                req.open('GET', WEB_URL);
-                req.responseType = "text";
-                req.send();
-
-                req.onload = () => {
-                    document.getElementById("sol-btn").innerHTML = " <div style='text-align: center;background-color:yellow;padding:2px;'>&lt;=Solution=&gt;</div>";
-                    console.log(document.getElementById("lid").value)
-                    const data = req.response;
-                    console.log(data)
-                    document.getElementById("sol-area").innerHTML = data;
-                }
-                req.onerror = (err) => {
-                    console.log(err)
-                }
-
-            }
+            document.getElementById('usr').innerHTML = "<span class='user'>[{{.User}}] <a href='{{.LogoutUrl}}' class='text-success'>Logout</a></span> "
         </script>
         {{end}}
+
     </div>
     <!-- Optional JavaScript; choose one of the two! -->
 

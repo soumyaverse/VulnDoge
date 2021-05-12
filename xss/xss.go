@@ -9,9 +9,7 @@ import (
 func XSSHandler(w http.ResponseWriter, r *http.Request) {
 
 	tmpl := template.Must(template.ParseFiles("templates/xss/xss.html", "templates/base.html"))
-	tmpl.ExecuteTemplate(w, "xss.html", struct {
-		Path string
-	}{Path: "» xss"})
+	tmpl.ExecuteTemplate(w, "xss.html", nil)
 }
 func Easy(w http.ResponseWriter, r *http.Request) {
 	payload := r.FormValue("payload")
@@ -39,6 +37,7 @@ func Hard(w http.ResponseWriter, r *http.Request) {
 
 	tmpl.ExecuteTemplate(w, "xss_hard.html", struct {
 		Payload string
-	}{Payload: payload})
+		Login   bool
+	}{Payload: payload, Login: false})
 
 }

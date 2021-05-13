@@ -7,3 +7,6 @@
 * `export MYSQL_URL="username:password@tcp(127.0.0.1:3306)/VulnDoge"`
 * `go build -ldflags "-s -w"` then run `./VulnSec` or `go run main.go`
 
+## DATABASE SETTING :
+* `./VulnDoge -dbconfig "username:password@tcp(127.0.0.1:3306)/mysql"`
+

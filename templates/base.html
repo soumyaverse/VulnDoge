@@ -21,9 +21,9 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"> <span id="usr" class="text-danger"></span></li>
             </ul>
-            <form class="d-flex">
-                <button class="btn btn-outline-success" type="submit">Solution</button>
-            </form>
+            <span class="d-flex" id="sol-btn">
+                
+            </span>
 
         </div>
     </nav>
@@ -32,6 +32,30 @@
         {{template "main" .}} {{if .Login}}
         <script>
             document.getElementById('usr').innerHTML = "<span class='user'>[{{.User}}] <a href='{{.LogoutUrl}}' class='text-success'>Logout</a></span> "
+        </script>
+        {{end}} {{if .Sol}}
+        <input type="hidden" name="lid" id="lid" value={{.Lid}}>
+        <div id="sol-area"></div>
+        <script>
+            document.getElementById("sol-btn").innerHTML = `<button class="btn btn-outline-success" type="submit" onclick="getSolution()">Solution</button>`
+
+            const getSolution = () => {
+
+                const req = new XMLHttpRequest();
+                WEB_URL = location.protocol + "//" + location.host + "/api/solution?" + "lid=" + document.getElementById('lid').value
+                req.open('GET', WEB_URL);
+                req.responseType = "text";
+                req.send();
+
+                req.onload = () => {
+                    const data = req.response;
+                    document.getElementById("sol-area").innerHTML = " <br><div style='text-align: center;background-color:yellow;padding:2px;'>&lt;=Solution=&gt;</div><br>" + data;
+                }
+                req.onerror = (err) => {
+                    console.log(err)
+                }
+
+            }
         </script>
         {{end}}
 

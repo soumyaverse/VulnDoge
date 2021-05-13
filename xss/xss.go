@@ -21,6 +21,8 @@ func Easy(w http.ResponseWriter, r *http.Request) {
 		Desc    string
 		Login   bool
 		User    string
+		Sol     bool
+		Lid     string
 	}{Title: "xss easy", Desc: `<h2>XSS</h2>
 	` + payload + `
 	<br>
@@ -28,7 +30,7 @@ func Easy(w http.ResponseWriter, r *http.Request) {
 		<input type="text" name="payload"><br><br>
 		
 		<button type="submit" class="btn btn-dark btn-sm">Submit</button>
-	</form>`, Login: false, Payload: payload})
+	</form>`, Login: false, Payload: payload, Sol: true, Lid: "a3"})
 }
 
 func Hard(w http.ResponseWriter, r *http.Request) {

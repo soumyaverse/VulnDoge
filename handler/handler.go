@@ -21,12 +21,20 @@ func HandleDirectoryTrversal() {
 
 func HandleCSRF() {
 	http.HandleFunc("/csrf/", csrf.CSRFHandler)
+
 	http.HandleFunc("/csrf/easy1/", csrf.Easy1)
-	http.HandleFunc("/csrf/easy1/login/", csrf.Login)
-	http.HandleFunc("/csrf/easy1/create/", csrf.Create)
+	http.HandleFunc("/csrf/easy1/login/", csrf.LoginEasy1)
+	http.HandleFunc("/csrf/easy1/create/", csrf.CreateEasy1)
 	http.HandleFunc("/csrf/easy1/myaccount/", csrf.MyAccount)
-	http.HandleFunc("/csrf/easy1/logout/", csrf.Logout)
+	http.HandleFunc("/csrf/easy1/logout/", csrf.LogoutEasy1)
 	http.HandleFunc("/csrf/easy1/changepassword/", csrf.ChangePassword)
+
+	http.HandleFunc("/csrf/easy2/", csrf.Easy2)
+	http.HandleFunc("/csrf/easy2/login/", csrf.LoginEasy2)
+	http.HandleFunc("/csrf/easy2/create/", csrf.CreateEasy2)
+	http.HandleFunc("/csrf/easy2/myaccount/", csrf.MyAccountEasy2)
+	http.HandleFunc("/csrf/easy2/logout/", csrf.LogoutEasy2)
+	http.HandleFunc("/csrf/easy2/changepassword/", csrf.ChangePasswordEasy2)
 
 }
 

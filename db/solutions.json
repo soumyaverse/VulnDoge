@@ -15,6 +15,12 @@
             "title": "xss easy",
             "sol": "easy XSS"
 
+        },
+        {
+            "lid": "a4",
+            "title": "csrf easy 1",
+            "sol": "use burpsuite CSRF POC generator"
+
         }
     ]
 }

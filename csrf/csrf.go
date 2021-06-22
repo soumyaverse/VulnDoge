@@ -165,6 +165,27 @@ func EmailExists(db *sql.DB, email string) bool {
 	return true
 }
 
+func TokenExists(db *sql.DB, token string) bool {
+	sqlquery := `SELECT token FROM tokens WHERE token = ?`
+	err := db.QueryRow(sqlquery, token).Scan(&token)
+	if err != nil {
+		if err != sql.ErrNoRows {
+			log.Print(err)
+		}
+		return false
+	}
+	return true
+}
+
+func TokenInsert(token string) {
+	db, err := sql.Open("mysql", os.Getenv("MYSQL_URL"))
+	CheckErr.Check(err)
+
+	_, err = db.Exec(`INSERT INTO tokens(token) VALUE(?)`, token)
+	CheckErr.Check(err)
+	defer db.Close()
+}
+
 func DBUpdateSession(username string, session string, db *sql.DB) {
 	_, err := db.Exec(`UPDATE users SET session= ? WHERE username= ? `, session, username)
 	CheckErr.Check(err)
@@ -185,6 +206,7 @@ func SessionExist(r *http.Request, db *sql.DB) (bool, string) {
 		var uname string
 		_ = db.QueryRow(`SELECT username FROM users WHERE session = ? `, cookie.Value).Scan(&uname)
 		if len(cookie.Value) == 16 {
+			fmt.Println("Session Exist: " + uname)
 			return true, uname
 		}
 	}
@@ -216,6 +238,40 @@ func MyAccount(w http.ResponseWriter, r *http.Request) {
 		</div>`, Login: isSession, User: uname, LogoutUrl: "/csrf/easy1/logout/"})
 	} else {
 		http.Redirect(w, r, "/csrf/easy1/", 302)
+	}
+}
+
+func MyAccountCSRFToken(w http.ResponseWriter, r *http.Request, title string, base string, token string) {
+	db, err := sql.Open("mysql", os.Getenv("MYSQL_URL"))
+	CheckErr.Check(err)
+
+	isSession, uname := SessionExist(r, db)
+	fmt.Println("MyAccountCSRFToken: ", uname)
+	fmt.Println("isSession: ", isSession)
+
+	if isSession {
+
+		tmpl := template.Must(template.ParseFiles("templates/csrf/easy1.html", "templates/base.html"))
+		tmpl.ExecuteTemplate(w, "easy1.html", struct {
+			Title     string
+			Desc      string
+			Login     bool
+			User      string
+			Sol       bool
+			LogoutUrl string
+			Lid       string
+		}{Title: title, Desc: `<h3>Welcome ` + uname + ` :)</h3><br><br><div class="container"><h4>Change Password</h4>
+		<form action='/csrf/` + base + `/changepassword/' method='POST'>
+		  <div class="mb-3">
+		    <input type="hidden" name="csrf-token" value="` + token + `">
+			<label for="newpassword" class="form-label">New Password</label>
+			<input type="password" class="form-control" name="newpassword" required>
+		  </div>
+		  <button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+		</div>`, Login: isSession, User: uname, LogoutUrl: "/csrf/" + base + "/logout/", Sol: false, Lid: "nil"})
+	} else {
+		http.Redirect(w, r, "/csrf/"+base+"/", 302)
 	}
 }
 

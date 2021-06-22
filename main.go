@@ -30,7 +30,9 @@ func main() {
 		db, err = sql.Open("mysql", os.Getenv("MYSQL_URL"))
 		CheckErr.Check(err)
 		defer db.Close()
-		_, err = db.Exec(`CREATE TABLE users(id INT PRIMARY KEY AUTO_INCREMENT,username VARCHAR(255),email VARCHAR(255),password VARCHAR(255),session VARCHAR(255))`)
+		_, err = db.Exec(`CREATE TABLE users(id INT PRIMARY KEY AUTO_INCREMENT,username VARCHAR(255),email VARCHAR(255),password VARCHAR(255),session VARCHAR(255),csrftoken VARCHAR(255))`)
+		CheckErr.Check(err)
+		_, err = db.Exec(`CREATE TABLE tokens(id INT PRIMARY KEY AUTO_INCREMENT,token VARCHAR(255))`)
 		CheckErr.Check(err)
 
 	}

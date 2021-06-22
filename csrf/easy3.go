@@ -72,3 +72,7 @@ func MyAccountEasy3(w http.ResponseWriter, r *http.Request) {
 	MyAccountCSRFToken(w, r, "CSRF where token is not tied to user session", "easy3", token)
 
 }
+
+func LogoutEasy3(w http.ResponseWriter, r *http.Request) {
+	Logout(w, r, "easy3")
+}

@@ -1,5 +1,6 @@
 ![logo](https://github.com/burpOverflow/VulnDoge/blob/master/media/logo2.png)
 
+IT IS NOW IN DEV STAGE
 
 ## INSTALLATION :
 * `git clone https://github.com/burpOverflow/VulnDoge`

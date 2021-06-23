@@ -1,4 +1,4 @@
-![logo](https://github.com/burpOverflow/VulnDoge/blob/master/media/logo2.png)
+![logo](https://github.com/burpOverflow/VulnDoge/blob/master/media/logo.png)
 
 IT IS NOW IN DEV STAGE
 

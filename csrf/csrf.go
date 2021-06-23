@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"text/template"
 
 	"github.com/burpOverflow/VulnDoge/pkg/CheckErr"
@@ -201,15 +202,22 @@ func DBUpdatePassword(username string, newpass string, db *sql.DB) {
 
 func SessionExist(r *http.Request, db *sql.DB) (bool, string) {
 	cookie, err := r.Cookie("session")
-	if err == nil {
-
-		var uname string
-		_ = db.QueryRow(`SELECT username FROM users WHERE session = ? `, cookie.Value).Scan(&uname)
-		if len(cookie.Value) == 16 {
-			fmt.Println("Session Exist: " + uname)
-			return true, uname
-		}
+	if err != nil {
+		return false, "nil"
 	}
+	var uname string
+	err = db.QueryRow(`SELECT username FROM users WHERE session = ? `, cookie.Value).Scan(&uname)
+	if err != nil {
+		if err != sql.ErrNoRows {
+			fmt.Println(err)
+		}
+		return false, "nil"
+	}
+	if len(strings.Trim(uname, "")) > 1 && len(cookie.Value) == 16 {
+		fmt.Println("Session Exist: " + uname)
+		return true, uname
+	}
+
 	return false, "nil"
 }
 

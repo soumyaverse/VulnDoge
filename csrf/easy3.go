@@ -2,6 +2,7 @@ package csrf
 
 import (
 	"database/sql"
+	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
 
@@ -75,4 +76,23 @@ func MyAccountEasy3(w http.ResponseWriter, r *http.Request) {
 
 func LogoutEasy3(w http.ResponseWriter, r *http.Request) {
 	Logout(w, r, "easy3")
+}
+
+func ChangePasswordEasy3(w http.ResponseWriter, r *http.Request) {
+	newpassword := r.PostFormValue("newpassword")
+	db, err := sql.Open("mysql", os.Getenv("MYSQL_URL"))
+	CheckErr.Check(err)
+	defer db.Close()
+
+	clientCsrfToken := r.PostFormValue("csrf-token")
+	isExistCsrf := TokenExists(db, clientCsrfToken)
+	isSession, uname := SessionExist(r, db)
+	if isExistCsrf && isSession {
+		DBUpdatePassword(uname, newpassword, db)
+		http.Redirect(w, r, "/csrf/easy3/", 302)
+		return
+	} else {
+		fmt.Fprintf(w, "Unable to Change Password")
+		return
+	}
 }

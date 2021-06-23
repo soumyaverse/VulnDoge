@@ -23,6 +23,7 @@ func main() {
 		db, err := sql.Open("mysql", *dbConfig)
 		CheckErr.Check(err)
 		defer db.Close()
+
 		_, err = db.Exec(`DROP DATABASE IF EXISTS VulnDoge`)
 		CheckErr.Check(err)
 		_, err = db.Exec(`CREATE DATABASE VulnDoge`)

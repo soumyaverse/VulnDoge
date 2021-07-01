@@ -89,6 +89,8 @@ func ChangePasswordEasy3(w http.ResponseWriter, r *http.Request) {
 	isSession, uname := SessionExist(r, db)
 	if isExistCsrf && isSession {
 		DBUpdatePassword(uname, newpassword, db)
+		_, err = db.Exec(`DELETE FROM tokens WHERE token= ? `, clientCsrfToken)
+		CheckErr.Check(err)
 		http.Redirect(w, r, "/csrf/easy3/", 302)
 		return
 	} else {

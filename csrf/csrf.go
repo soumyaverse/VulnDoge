@@ -197,7 +197,7 @@ func DBUpdateSession(username string, session string, db *sql.DB) {
 func DBUpdatePassword(username string, newpass string, db *sql.DB) {
 	_, err := db.Exec(`UPDATE users SET password= ? WHERE username= ? `, newpass, username)
 	CheckErr.Check(err)
-	defer db.Close()
+	// defer db.Close()
 }
 
 func SessionExist(r *http.Request, db *sql.DB) (bool, string) {

@@ -45,6 +45,10 @@ func HandleCSRF() {
 	http.HandleFunc("/csrf/easy3/logout/", csrf.LogoutEasy3)
 	http.HandleFunc("/csrf/easy3/changepassword/", csrf.ChangePasswordEasy3)
 
+	// csrf easy4
+	// //CSRF where token is tied to non-session cookie
+	http.HandleFunc("/csrf/easy4/", csrf.Easy4)
+
 }
 
 func HandleAPI() {

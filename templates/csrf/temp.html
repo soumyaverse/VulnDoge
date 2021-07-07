@@ -1,4 +1,13 @@
 {{template "base" .}} {{define "title"}}{{.Title}}{{end}} {{define "main"}}
 <p class="text-primary" style="font-size: x-large;">{{.Title}}</p>
 
+<p><a href="/csrf/easy4/login/">Login</a> or <a href="/csrf/easy4/create/">Create Account</a></p>
+<div class="container">
+    <form action="/csrf/easy4/" method="get">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="search here" aria-label="Recipient's username" aria-describedby="button-addon2" name="search" required>
+            <button class="btn btn-primary" type="submit" id="button-addon2">Search</button>
+        </div>
+    </form>
+</div>
 {{end}}
